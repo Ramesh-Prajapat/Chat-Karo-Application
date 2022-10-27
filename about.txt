@@ -1,0 +1,7 @@
+Our application was also developed in the same way to provide a 
+platform where users can chat without sharing their private 
+details with other users like Phone Numbers, email-id, etc. 
+It allows the user to get registered with the application, then 
+the user can create a room and it will get listed in the public 
+list and people can join and make new friends. With this application 
+users don’t have the risk of data leak as because of strong encryption storage.

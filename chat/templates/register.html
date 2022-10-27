@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE HTML>
+<title>ChatKaro</title>
+<head>
+
+  {% load staticfiles %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  function myFunction() {
+      var pass1 = document.getElementById("password").value;
+      var pass2 = document.getElementById("confirm_password").value;
+      var ok = true;
+      if (pass1 != pass2) {
+        //alert("Passwords Do not match");
+        document.getElementById("password").style.borderColor = "#E34234";
+        document.getElementById("confirm_password").style.borderColor = "#E34234";
+        alert("Confirm Password Not Matching, Please try again....!!!");
+              ok = false;
+      }
+      else {
+          alert("User Added!");
+      }
+      return ok;
+}
+
+function check_user(element) {
+    $("#login_ok").hide();
+    $("#login_not").hide();
+    login = $(element).val();
+    if (login == "") {
+        return;
+    }
+    $.ajax({
+        url : $(element).attr("data-url"),
+        data : {
+            "csrfmiddlewaretoken" : $(element).siblings("input[name='csrfmiddlewaretoken']" ).val(),
+            "login":login
+        },
+        method: "POST",
+        dataType : "json",
+        success : function (returned_data) {
+            if (returned_data.is_success) {
+                $("#login_ok").show();
+            } else {
+                $("#login_not").show();
+            }
+        }
+    });
+}
+
+
+  </script>
+
+  </head>
+
+<style>
+
+body {
+  width: 100%;
+  height:100%;
+  font-family: 'Open Sans', sans-serif;
+  background: #092756;
+  background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%),-moz-linear-gradient(top,  rgba(57,173,219,.25) 0%, rgba(42,60,87,.4) 100%), -moz-linear-gradient(-45deg,  #670d10 0%, #092756 100%);
+  background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -webkit-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -webkit-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
+  background: -o-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -o-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -o-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
+  background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -ms-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -ms-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
+  background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), linear-gradient(to bottom,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), linear-gradient(135deg,  #670d10 0%,#092756 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
+}
+h1 {
+    color : #000000;
+    text-align : center;
+    font-family: "SIMPSON";
+}
+form {
+    width: 300px;
+    margin: 0 auto;
+}
+table {
+  margin: 0 auto;
+}
+
+table td {
+    padding-bottom: 5px;
+    color: white;
+}
+.registerbtn {
+  background-color: #1877F2;
+  color: white;
+  padding: 10px 5px;
+  margin: 20px 0;
+  border: none;
+  cursor: pointer;
+  width: 250%;
+  opacity: 0.9;
+}
+</style>
+<body>
+  <div>
+    {% include 'navigation.html' %}
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <form action="{% url 'register_redirect' %}" method='post' onsubmit="return myFunction()">
+      <center style="color: white;"><h4>Welcome At Chat Karo!</h4></center><br><br>
+<center><img style="max-width: 60%; height: 50; border-radius: 50%;"  src="http://main.buildabazaar.com/img/shrd/html_widget_images/38/14/604/12a5a8d897be2_nobodym.original.jpg.999xx.jpg"/></center>
+      {% csrf_token %}
+        <table>
+          <tr>
+            <td>Name :</td>
+            <td>
+              <input class="form-control input-sm" type='text' name="name" required>
+            </td>
+            <br>
+          </tr>
+          <tr>
+            <td>Username :</td>
+            <td>
+              <input type="text" class="form-control input-sm" name="login" id="login"  required="True" onkeyup="check_user(this);return false;" data-url="{% url 'check_user' %}"/>
+              {% csrf_token %}
+            <div class="col-md-6 col-sm-6" style="color:red;display:none;margin-top: 4px;"  id="login_not">
+                <span class="glyphicon glyphicon-remove"></span> Username already taken.
+            </div>
+            <div class="col-md-6 col-sm-6" style="color: green;display: none;margin-top: 4px;" id="login_ok">
+                <span class="glyphicon glyphicon-ok"></span> Username available.
+            </div>
+            </td>
+            <br>
+          </tr>
+          <tr>
+            <div class="container2">
+            <td>Gender :</td>
+            <td>
+
+                <input type="radio" name="gender" value="male">Male</input>
+                <input type="radio" name="gender" value="Female">Female</input>
+            </td>
+            </div>
+            <br>
+          </tr>
+          <tr>
+            <td>State: </td>
+            <td>
+              <select name="state" class="form-control input-sm"  style="width: 180px; height:32px; " >
+                  <option value=""></option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Madhya">Madhya</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
+            </select>
+            </td>
+            <br>
+          </tr>
+          <tr>
+
+
+
+            <td>Password :</td>
+            <td>
+              <input class="form-control input-sm" type="password" id="password" name="password" required>
+            </td>
+            <br>
+          </tr>
+          <tr>
+            <td>Confirm Password: </td>
+            <td>
+              <input class="form-control input-sm" type="password" id="confirm_password" name="confirm_password" required>
+            </td>
+            <br>
+          </tr>
+          <tr>
+            <td>
+              <input class="registerbtn" type="submit" value="Submit">
+            </td>
+          </tr>
+        </table>
+    </form>
+  </div>
+</body>
+    </form>
+  </div>
+</body>
+</html>
